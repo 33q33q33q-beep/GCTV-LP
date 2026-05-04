@@ -1,0 +1,30 @@
+-- 初期コンテンツ枠（9スロット）。既に行がある環境では何もしない。
+insert into public.content_spots (category_key, position, title, url, thumbnail_url, duration)
+values
+  ('race_interview', 0, 'BICYCLE RACE', 'https://www.youtube.com/live/MWdZ8Y1tNPA?si=thffINOJa0SQTxBi',
+   'https://img.youtube.com/vi/MWdZ8Y1tNPA/maxresdefault.jpg', 'LIVE'),
+  ('race_interview', 1, 'INTERVIEW', 'https://www.youtube.com/playlist?list=PLvEOnP8mxvn5cthZGZdDj6GmSj16mUm3Q',
+   'https://readdy.ai/api/search-image?query=cycling%20race%20interview%20studio%20setup%20with%20professional%20cyclists%20and%20hosts%2C%20sports%20broadcasting%20set%20with%20modern%20lighting%2C%20television%20production%20quality&width=640&height=360&seq=race-2&orientation=landscape',
+   '45:32'),
+  ('race_interview', 2, 'Repeat Broadcast -再放送・ハイライト-', 'https://www.youtube.com/playlist?list=PLvEOnP8mxvn6ohQmeyFZNH_V6kEYOQZxF',
+   'https://readdy.ai/api/search-image?query=exciting%20cycling%20race%20sprint%20finish%20with%20multiple%20cyclists%20competing%20for%20victory%2C%20high%20speed%20action%20shot%2C%20professional%20sports%20photography%20with%20motion%20blur&width=640&height=360&seq=race-3&orientation=landscape',
+   '28:15'),
+  ('news_information', 0, 'J PRO NEWS', 'https://www.youtube.com/playlist?list=PLvEOnP8mxvn47h3g7U5-oLLgYWT5TJXHo',
+   'https://readdy.ai/api/search-image?query=professional%20cyclist%20portrait%20interview%20in%20modern%20studio%2C%20athlete%20talking%20about%20career%20and%20experiences%2C%20documentary%20style%20photography%20with%20soft%20lighting&width=640&height=360&seq=interview-1&orientation=landscape',
+   '15:42'),
+  ('news_information', 1, 'チャリタイムズ', 'https://www.youtube.com/playlist?list=PLvEOnP8mxvn78uoZjfWfgjWiZ1GzwuzUo',
+   'https://readdy.ai/api/search-image?query=close%20up%20of%20high%20end%20professional%20racing%20bicycle%20with%20detailed%20components%2C%20beautiful%20bike%20photography%20in%20studio%20setting%2C%20premium%20cycling%20equipment%20showcase&width=640&height=360&seq=interview-2&orientation=landscape',
+   '22:18'),
+  ('news_information', 2, 'BicycleGear', 'https://www.youtube.com/playlist?list=PLvEOnP8mxvn7D2G-QMrLE9eOceLNUX-IR',
+   'https://readdy.ai/api/search-image?query=retired%20professional%20cyclist%20special%20interview%20in%20comfortable%20setting%2C%20emotional%20storytelling%20moment%2C%20documentary%20photography%20with%20warm%20atmosphere&width=640&height=360&seq=interview-3&orientation=landscape',
+   '38:55'),
+  ('variety_beginner', 0, 'GCTV特派員', 'https://www.youtube.com/@GachinkoCycleTV-TOKUHAIN',
+   'https://readdy.ai/api/search-image?query=happy%20female%20cyclist%20riding%20through%20beautiful%20coastal%20scenic%20route%20with%20ocean%20view%2C%20joyful%20cycling%20adventure%2C%20bright%20sunny%20day%20with%20blue%20sky%20and%20sea&width=640&height=360&seq=variety-1&orientation=landscape',
+   '25:30'),
+  ('variety_beginner', 1, 'おしえて栗村さん！', 'https://www.youtube.com/playlist?list=PLvEOnP8mxvn7KzHNtjoXpB-NjTvd1HOrp',
+   'https://readdy.ai/api/search-image?query=female%20cyclist%20enjoying%20delicious%20local%20food%20at%20outdoor%20cafe%2C%20smiling%20while%20eating%20regional%20cuisine%2C%20travel%20and%20gourmet%20cycling%20content&width=640&height=360&seq=variety-2&orientation=landscape',
+   '18:45'),
+  ('variety_beginner', 2, 'GCTV特派員「TOJ開催地を走る！」', 'https://www.youtube.com/playlist?list=PLplwFAnqJtMFOXXMO2HW9gS4ozh8umMLJ',
+   'https://readdy.ai/api/search-image?query=cycling%20expert%20instructor%20teaching%20beginners%20about%20road%20cycling%20techniques%2C%20educational%20content%20in%20friendly%20atmosphere%2C%20how%20to%20guide%20photography&width=640&height=360&seq=variety-3&orientation=landscape',
+   '12:20')
+on conflict (category_key, position) do nothing;
