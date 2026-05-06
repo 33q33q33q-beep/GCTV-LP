@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import GachinekoSticker from "../../../components/GachinekoSticker";
 import { usePublishedArticles } from "../../../hooks/usePublishedArticles";
 
 export default function NewsSection() {
+  const { t } = useTranslation();
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const { articles, loading } = usePublishedArticles();
   const newsItems = articles.slice(0, 3);
@@ -12,22 +14,20 @@ export default function NewsSection() {
     <section className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 relative">
-          <div className="absolute -left-1 md:left-2 top-0 w-28 md:w-36 lg:w-40 pointer-events-none opacity-95">
+          <div className="hidden md:block absolute left-2 top-0 w-36 lg:w-40 pointer-events-none opacity-90">
             <GachinekoSticker variant="ohayon" className="w-full h-auto" />
           </div>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
             <span className="text-red-600">Latest News</span>
           </h2>
-          <p className="text-gray-500 text-lg">GCTVからの最新情報・レポート</p>
+          <p className="text-gray-500 text-lg">{t("news.subtitle")}</p>
           <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto mt-4"></div>
         </div>
 
         {loading ? (
-          <p className="text-center text-gray-400 py-16">読み込み中…</p>
+          <p className="text-center text-gray-400 py-16">{t("common.loading")}</p>
         ) : newsItems.length === 0 ? (
-          <p className="text-center text-gray-500 py-16">
-            記事がありません。管理画面または Supabase で記事を追加してください。
-          </p>
+          <p className="text-center text-gray-500 py-16">{t("news.noArticlesCmsHint")}</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {newsItems.map((item) => (
@@ -71,7 +71,7 @@ export default function NewsSection() {
                     </p>
 
                     <div className="flex items-center gap-2 text-red-600 font-bold text-sm group-hover:gap-3 transition-all">
-                      <span>記事を読む</span>
+                      <span>{t("articles.readMore")}</span>
                       <i className="ri-arrow-right-line"></i>
                     </div>
                   </div>
@@ -87,19 +87,19 @@ export default function NewsSection() {
             className="inline-flex items-center gap-3 bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 cursor-pointer whitespace-nowrap"
           >
             <i className="ri-article-line text-xl"></i>
-            すべての記事を見る
+            {t("news.seeAll")}
           </Link>
           <p className="mt-6 text-gray-400 text-sm">
-            コラム・読みものは{" "}
+            {t("news.noteLine.before")}
             <a
               href="https://note.com/gctv"
               target="_blank"
               rel="noopener noreferrer"
               className="text-emerald-600 font-semibold underline-offset-4 hover:underline"
             >
-              note（magazine）
-            </a>{" "}
-            でも公開中
+              {t("articles.noteMagazineLink")}
+            </a>
+            {t("news.noteLine.after")}
           </p>
         </div>
       </div>

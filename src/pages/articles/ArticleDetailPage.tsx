@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import type { Article } from '../../domain/article';
-import { fetchPublishedArticleBySlug } from '../../services/newsService';
-import NotFound from '../NotFound';
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import type { Article } from "../../domain/article";
+import { fetchPublishedArticleBySlug } from "../../services/newsService";
+import NotFound from "../NotFound";
 
-const SITE_NAME = 'GCTV';
+const SITE_NAME = "GCTV";
 
 export default function ArticleDetailPage() {
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<Article | null | undefined>(undefined);
 
@@ -29,7 +31,7 @@ export default function ArticleDetailPage() {
     if (article === undefined || article === null) return;
     document.title = `${article.title} | ${SITE_NAME}`;
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', article.excerpt);
+    if (metaDesc) metaDesc.setAttribute("content", article.excerpt);
 
     return () => {
       document.title = SITE_NAME;
@@ -39,7 +41,7 @@ export default function ArticleDetailPage() {
   if (article === undefined) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center text-gray-400">
-        読み込み中…
+        {t("article.loading")}
       </div>
     );
   }
@@ -54,29 +56,26 @@ export default function ArticleDetailPage() {
     .filter(Boolean);
 
   const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+    "@context": "https://schema.org",
+    "@type": "Article",
     headline: article.title,
     description: article.excerpt,
     image: article.image,
     datePublished: article.publishedAt,
     dateModified: article.publishedAt,
     author: {
-      '@type': 'Organization',
+      "@type": "Organization",
       name: SITE_NAME,
     },
     publisher: {
-      '@type': 'Organization',
+      "@type": "Organization",
       name: SITE_NAME,
     },
   };
 
   return (
     <div className="min-h-screen bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <header className="border-b border-gray-100 bg-white">
         <div className="max-w-3xl mx-auto px-4 py-6 flex flex-wrap gap-4 justify-between items-center">
@@ -85,31 +84,24 @@ export default function ArticleDetailPage() {
             className="text-gray-600 hover:text-red-600 font-semibold inline-flex items-center gap-2 transition-colors text-sm"
           >
             <i className="ri-arrow-left-line" />
-            記事一覧
+            {t("article.backToIndex")}
           </Link>
           <Link to="/" className="text-gray-400 hover:text-gray-700 text-sm">
-            トップへ
+            {t("articles.backHome")}
           </Link>
         </div>
       </header>
 
       <article className="max-w-3xl mx-auto px-4 py-10 md:py-14">
         <div className="mb-6 flex flex-wrap gap-2 items-center text-sm">
-          <span className="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-            {article.category}
-          </span>
-          <time
-            dateTime={article.publishedAt}
-            className="text-gray-400 flex items-center gap-1"
-          >
+          <span className="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full">{article.category}</span>
+          <time dateTime={article.publishedAt} className="text-gray-400 flex items-center gap-1">
             <i className="ri-calendar-line" />
             {article.date}
           </time>
         </div>
 
-        <h1 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-6">
-          {article.title}
-        </h1>
+        <h1 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-6">{article.title}</h1>
 
         <p className="text-lg text-gray-600 leading-relaxed mb-10">{article.excerpt}</p>
 
@@ -119,17 +111,14 @@ export default function ArticleDetailPage() {
 
         <div className="prose prose-gray max-w-none">
           {paragraphs.map((paragraph, idx) => (
-            <p
-              key={idx}
-              className="text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap"
-            >
+            <p key={idx} className="text-gray-700 leading-relaxed mb-6 whitespace-pre-wrap">
               {paragraph}
             </p>
           ))}
         </div>
 
         <div className="mt-14 pt-10 border-t border-gray-100">
-          <p className="text-sm text-gray-500 mb-4">関連リンク</p>
+          <p className="text-sm text-gray-500 mb-4">{t("article.relatedLinks")}</p>
           <div className="flex flex-wrap gap-3">
             <a
               href="https://note.com/gctv"

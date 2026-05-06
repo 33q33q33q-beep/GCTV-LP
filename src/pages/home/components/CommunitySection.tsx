@@ -1,25 +1,6 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useShortsGallery } from "../../../hooks/useShortsGallery";
-
-const communities = [
-  {
-    title: "🚴私の愛車紹介～my favorite bicycle~🚵",
-    description: "自慢の愛車を投稿して、サイクリスト仲間と交流しよう！",
-    members: "2,345",
-    icon: "ri-facebook-fill",
-    color: "from-red-500 to-rose-600",
-    url: "https://www.facebook.com/groups/1175034630811288/",
-    thumbSrc: `${import.meta.env.BASE_URL}community/my-favorite-bicycle.png`,
-  },
-  {
-    title: "🚴サイクリングルート共有コミュニティ🚵",
-    description: "おすすめのルートやグルメスポットを共有しよう！",
-    members: "1,892",
-    icon: "ri-facebook-fill",
-    color: "from-red-600 to-red-700",
-    url: "https://www.facebook.com/groups/678442815124783/",
-    thumbSrc: `${import.meta.env.BASE_URL}community/cycling-route-sharing.png`,
-  },
-];
 
 function CardThumb({ src, title }: { src: string; title: string }) {
   if (src.trim()) {
@@ -39,11 +20,36 @@ function CardThumb({ src, title }: { src: string; title: string }) {
 }
 
 export default function CommunitySection() {
+  const { t } = useTranslation();
   const { items: shortsVideos, settings, loading, source } = useShortsGallery();
 
   const tiktokMore = settings?.footer_tiktok_url ?? "https://www.tiktok.com/@gachinkocycletv_gctv";
   const ytShortsMore =
     settings?.footer_youtube_shorts_url ?? "https://www.youtube.com/@GachinkoCycleTV/shorts";
+
+  const fbCommunities = useMemo(
+    () => [
+      {
+        url: "https://www.facebook.com/groups/1175034630811288/",
+        icon: "ri-facebook-fill" as const,
+        color: "from-red-500 to-rose-600",
+        thumbSrc: `${import.meta.env.BASE_URL}community/my-favorite-bicycle.png`,
+        titleKey: "community.fb1.title",
+        descKey: "community.fb1.desc",
+        members: "2,345",
+      },
+      {
+        url: "https://www.facebook.com/groups/678442815124783/",
+        icon: "ri-facebook-fill" as const,
+        color: "from-red-600 to-red-700",
+        thumbSrc: `${import.meta.env.BASE_URL}community/cycling-route-sharing.png`,
+        titleKey: "community.fb2.title",
+        descKey: "community.fb2.desc",
+        members: "1,892",
+      },
+    ],
+    [],
+  );
 
   return (
     <section className="py-20 px-4 bg-gray-50">
@@ -52,16 +58,16 @@ export default function CommunitySection() {
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
             <span className="text-red-600">Community</span>
           </h2>
-          <p className="text-gray-500 text-lg">ファンコミュニティに参加しよう</p>
+          <p className="text-gray-500 text-lg">{t("community.subtitle")}</p>
           <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto mt-4"></div>
         </div>
 
         <div className="mb-12">
           <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 text-center">
-            Facebookコミュニティ
+            {t("community.fb.section")}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {communities.map((community, index) => (
+            {fbCommunities.map((community, index) => (
               <div
                 key={index}
                 className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-red-400 transition-all duration-300 group hover:shadow-md flex flex-col"
@@ -74,7 +80,7 @@ export default function CommunitySection() {
                 >
                   <img
                     src={community.thumbSrc}
-                    alt={community.title}
+                    alt={t(community.titleKey)}
                     className="absolute inset-0 w-full h-full object-cover object-center transform group-hover:scale-[1.02] transition-transform duration-500"
                   />
                   <div className="absolute top-3 right-3 w-10 h-10 bg-white/95 rounded-lg shadow flex items-center justify-center">
@@ -83,13 +89,13 @@ export default function CommunitySection() {
                 </a>
                 <div className="p-6 md:p-8 flex-1 flex flex-col">
                   <h4 className="text-gray-900 font-black text-xl mb-3 group-hover:text-red-600 transition-colors">
-                    {community.title}
+                    {t(community.titleKey)}
                   </h4>
-                  <p className="text-gray-500 mb-4 flex-1">{community.description}</p>
+                  <p className="text-gray-500 mb-4 flex-1">{t(community.descKey)}</p>
                   <div className="flex items-center justify-between gap-3 flex-wrap">
                     <span className="text-gray-400 text-sm">
                       <i className="ri-group-fill mr-1"></i>
-                      {community.members} メンバー
+                      {community.members} {t("community.fb.membersSuffix")}
                     </span>
                     <a
                       href={community.url}
@@ -97,7 +103,7 @@ export default function CommunitySection() {
                       rel="noopener noreferrer"
                       className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors whitespace-nowrap"
                     >
-                      参加する
+                      {t("community.fb.join")}
                     </a>
                   </div>
                 </div>
@@ -108,23 +114,16 @@ export default function CommunitySection() {
 
         <div>
           <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-2 text-center">
-            TikTok &amp; Shorts ギャラリー
+            {t("community.shorts.section")}
           </h3>
-          <p className="text-center text-sm text-gray-500 mb-6">
-            表示内容は管理画面でURL・サムネ・タイトルを編集できます。
-            {source === "fallback" && (
-              <span className="block mt-1 text-amber-700">
-                デモ表示中（Supabase に `shorts_gallery_items` があると本番データになります）
-              </span>
-            )}
-          </p>
+          {source === "fallback" && (
+            <p className="text-center text-sm text-amber-700 mb-6">{t("community.shorts.fallbackBadge")}</p>
+          )}
           <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
             {loading ? (
-              <p className="text-center text-gray-400 py-12">読み込み中…</p>
+              <p className="text-center text-gray-400 py-12">{t("common.loading")}</p>
             ) : shortsVideos.length === 0 ? (
-              <p className="text-center text-gray-500 py-12 text-sm">
-                まだカードがありません。管理画面の「TikTok &amp; Shorts」から動画URLを登録してください。
-              </p>
+              <p className="text-center text-gray-500 py-12 text-sm">{t("community.shorts.empty")}</p>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {shortsVideos.map((video) => (
@@ -165,7 +164,7 @@ export default function CommunitySection() {
                 className="inline-flex items-center gap-2 bg-neutral-950 hover:bg-neutral-800 text-white font-black py-3 px-7 rounded-xl transition-colors whitespace-nowrap"
               >
                 <i className="ri-video-chat-line text-lg" />
-                TikTok でもっと見る
+                {t("community.shorts.moreTikTok")}
               </a>
               <a
                 href={ytShortsMore}
@@ -174,7 +173,7 @@ export default function CommunitySection() {
                 className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-black py-3 px-7 rounded-xl transition-colors whitespace-nowrap"
               >
                 <i className="ri-youtube-fill text-lg" />
-                Shortsでもっと見る
+                {t("community.shorts.moreYt")}
               </a>
             </div>
           </div>

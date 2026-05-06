@@ -1,12 +1,14 @@
+import { useTranslation } from "react-i18next";
 import { useMergedContents } from "../../../hooks/useMergedContents";
 
 export default function ContentsSection() {
+  const { t } = useTranslation();
   const { categories, loading } = useMergedContents();
 
   if (loading || !categories) {
     return (
       <section className="py-20 px-4 bg-red-50/50">
-        <div className="max-w-7xl mx-auto text-center text-gray-400 py-24">Loading…</div>
+        <div className="max-w-7xl mx-auto text-center text-gray-400 py-24">{t("contents.loading")}</div>
       </section>
     );
   }
@@ -18,7 +20,7 @@ export default function ContentsSection() {
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-2">
             <span className="text-red-600">Contents</span>
           </h2>
-          <p className="text-gray-500 text-base">YouTubeカテゴリー完全網羅</p>
+          <p className="text-gray-500 text-base">{t("contents.tagline")}</p>
           <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto mt-3"></div>
         </div>
 

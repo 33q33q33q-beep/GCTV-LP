@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useTranslation } from "react-i18next";
 import GachinekoSticker from "../../../components/GachinekoSticker";
 import {
   JAPAN_MAP_IMAGE_URL,
@@ -20,6 +21,7 @@ interface Transform {
 }
 
 export default function TravelMapSection() {
+  const { t } = useTranslation();
   const { locations, loading, source, hasPins } = useTokuhainMapPins();
   const containerRef = useRef<HTMLDivElement>(null);
   const [transform, setTransform] = useState<Transform>({ scale: 1, x: 0, y: 0 });
@@ -247,44 +249,44 @@ export default function TravelMapSection() {
     <section className="py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 relative">
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:top-0 md:right-0 lg:right-2 w-32 md:w-40 lg:w-44 pointer-events-none">
+          <div className="hidden md:block absolute md:left-auto md:translate-x-0 md:top-0 md:right-0 lg:right-2 md:w-40 lg:w-44 pointer-events-none">
             <GachinekoSticker variant="tanoshimi" className="w-full h-auto" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 pt-14 md:pt-2">
-            <span className="text-red-600">GCTV特派員</span><br />
-            トラベルマップ & ご当地グルメガイド
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 md:pt-2">
+            <span className="text-red-600">{t("travel.headline.correspondents")}</span><br />
+            {t("travel.headline.mapTitle")}
           </h2>
-          <p className="text-gray-500 text-lg">全国の絶景ルートとグルメスポットを巡る</p>
+          <p className="text-gray-500 text-lg">{t("travel.subtitle")}</p>
           <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-rose-500 mx-auto mt-4" />
         </div>
 
         {source === 'fallback' && !loading && (
           <p className="text-center text-xs text-amber-700 mb-4 max-w-3xl mx-auto">
-            Supabase が未設定のため、サンプルのピンを表示しています。接続すると管理画面から内容を変更できます。
+            {t("travel.fallbackStrip")}
           </p>
         )}
 
         {showEmptyHint && (
           <p className="text-center text-sm text-gray-600 mb-4 max-w-2xl mx-auto bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
-            公開中のピンがまだありません。
+            {t("travel.emptyPins.lead")}
             <a href="/admin/tokuhain-map" className="text-red-600 font-bold ml-1 underline">
-              管理画面 → 特派員マップ
+              {t("travel.emptyPinsAdminLink")}
             </a>
-            からピンを追加すると、ここに表示されます。
+            {t("travel.emptyPins.trail")}
           </p>
         )}
 
         <div className="flex items-center justify-between mb-4 max-w-5xl mx-auto">
           <p className="text-gray-400 text-sm flex items-center gap-2">
             <i className="ri-mouse-line w-4 h-4 flex items-center justify-center" />
-            マウスホイールで拡大縮小 / ドラッグで移動
+            {t("travel.hint.desktop")}
           </p>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={zoomOut}
               className="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors cursor-pointer"
-              aria-label="縮小"
+              aria-label={t("travel.zoom.outAria")}
             >
               <i className="ri-subtract-line text-gray-700 w-4 h-4 flex items-center justify-center" />
             </button>
@@ -293,13 +295,13 @@ export default function TravelMapSection() {
               onClick={resetZoom}
               className="px-3 h-10 rounded-lg bg-white border border-gray-200 text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors cursor-pointer"
             >
-              リセット
+              {t("travel.zoom.reset")}
             </button>
             <button
               type="button"
               onClick={zoomIn}
               className="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors cursor-pointer"
-              aria-label="拡大"
+              aria-label={t("travel.zoom.inAria")}
             >
               <i className="ri-add-line text-gray-700 w-4 h-4 flex items-center justify-center" />
             </button>
@@ -330,7 +332,7 @@ export default function TravelMapSection() {
 
             {loading ? (
               <div className="absolute inset-0 flex items-center justify-center bg-white/50">
-                <p className="text-gray-500 text-sm font-bold">マップ読み込み中…</p>
+                <p className="text-gray-500 text-sm font-bold">{t("travel.map.loading")}</p>
               </div>
             ) : (
               locations.map((location) => (
@@ -370,7 +372,7 @@ export default function TravelMapSection() {
         </div>
 
         {loading ? (
-          <p className="mt-12 text-center text-gray-400 text-sm">カード一覧を読み込み中…</p>
+          <p className="mt-12 text-center text-gray-400 text-sm">{t("travel.cards.loading")}</p>
         ) : hasPins ? (
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {locations.map((location) => (
@@ -411,7 +413,7 @@ export default function TravelMapSection() {
           </div>
         ) : (
           !showEmptyHint && (
-            <p className="mt-12 text-center text-gray-400 text-sm">このセクションには表示するピンがありません。</p>
+            <p className="mt-12 text-center text-gray-400 text-sm">{t("travel.noPinsSection")}</p>
           )
         )}
       </div>

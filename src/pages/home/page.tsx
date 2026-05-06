@@ -11,17 +11,19 @@ import Footer from './components/Footer';
 
 export default function Home() {
   return (
-    <div className="bg-white min-h-screen">
-      <HeroSection />
-      <GachinekoIntroSection />
-      <NewsSection />
-      <AboutSection />
-      <ContentsSection />
-      <ScheduleSection />
-      <SocialBlogSection />
-      <CommunitySection />
-      <TravelMapSection />
+    <>
+      <main className="bg-white min-h-screen">
+        <HeroSection />
+        <GachinekoIntroSection />
+        <NewsSection />
+        <AboutSection />
+        <ContentsSection />
+        <ScheduleSection />
+        <SocialBlogSection />
+        <CommunitySection />
+        <TravelMapSection />
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
