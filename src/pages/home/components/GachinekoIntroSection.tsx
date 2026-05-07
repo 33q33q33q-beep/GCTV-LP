@@ -31,8 +31,15 @@ export default function GachinekoIntroSection() {
       <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 items-end justify-items-center">
         {showcase.map(({ variant, caption }) => (
           <figure key={variant} className="flex flex-col items-center gap-3 w-full max-w-[15rem] sm:max-w-xs">
-            <div className="w-full drop-shadow-lg">
-              <GachinekoSticker variant={variant as GachinekoVariant} className="w-full h-auto" />
+            <div className="w-full drop-shadow-lg flex justify-center items-end">
+              <GachinekoSticker
+                variant={variant as GachinekoVariant}
+                className={
+                  variant === "onigiri"
+                    ? "w-full max-w-full max-h-[10.75rem] sm:max-h-48 md:max-h-52 lg:max-h-56 object-contain"
+                    : "w-full h-auto"
+                }
+              />
             </div>
             <figcaption className="text-xs md:text-sm font-bold text-gray-400">{caption}</figcaption>
           </figure>
