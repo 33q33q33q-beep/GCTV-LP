@@ -9,6 +9,7 @@ export default function AboutSection() {
     () => [
       {
         emoji: "🔥",
+        sticker: "ganbaru" as const,
         title: t("about.exp.watch.title"),
         description: t("about.exp.watch.desc"),
         gradient: "from-red-600 to-red-700",
@@ -16,6 +17,7 @@ export default function AboutSection() {
       },
       {
         emoji: "🧠",
+        sticker: "nyaruhodo" as const,
         title: t("about.exp.know.title"),
         description: t("about.exp.know.desc"),
         gradient: "from-red-400 to-rose-500",
@@ -23,6 +25,7 @@ export default function AboutSection() {
       },
       {
         emoji: "🚲",
+        sticker: "tanoshimi" as const,
         title: t("about.exp.begin.title"),
         description: t("about.exp.begin.desc"),
         gradient: "from-rose-500 to-red-500",
@@ -51,8 +54,11 @@ export default function AboutSection() {
             <a
               key={index}
               href={exp.href}
-              className="bg-gray-50 rounded-2xl p-8 text-center transform hover:scale-105 transition-all duration-300 hover:shadow-2xl border border-gray-200 hover:border-red-400 cursor-pointer group block no-underline"
+              className="relative bg-gray-50 rounded-2xl p-8 text-center transform hover:scale-105 transition-all duration-300 hover:shadow-2xl border border-gray-200 hover:border-red-400 cursor-pointer group block no-underline"
             >
+              <div className="hidden md:block absolute -top-4 -right-3 w-16 pointer-events-none opacity-95">
+                <GachinekoSticker variant={exp.sticker} className="w-full h-auto" />
+              </div>
               <div
                 className={`w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br ${exp.gradient} flex items-center justify-center text-5xl group-hover:rotate-12 transition-transform duration-300`}
               >

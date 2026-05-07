@@ -6,7 +6,7 @@ export default function ScheduleSection() {
   const { upcoming, ended, loading } = useBroadcastSchedule();
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section id="schedule" className="py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
@@ -21,7 +21,7 @@ export default function ScheduleSection() {
         ) : (
           <div className="space-y-16">
             <div className="bg-red-50 rounded-3xl p-8 md:p-12 border border-red-100">
-              <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 flex items-center gap-3">
+              <h3 id="schedule-upcoming" className="scroll-mt-24 text-2xl md:text-3xl font-black text-gray-900 mb-8 flex items-center gap-3">
                 <span className="w-3 h-3 rounded-full bg-red-600 animate-pulse"></span>
                 {t("schedule.section.upcoming")}
               </h3>
@@ -75,7 +75,7 @@ export default function ScheduleSection() {
             </div>
 
             <div className="bg-gray-50 rounded-3xl p-8 md:p-12 border border-gray-200">
-              <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 flex items-center gap-3">
+              <h3 id="schedule-ended" className="scroll-mt-24 text-2xl md:text-3xl font-black text-gray-900 mb-8 flex items-center gap-3">
                 <i className="ri-check-double-line text-green-600 text-2xl"></i>
                 {t("schedule.section.ended")}
               </h3>

@@ -44,10 +44,15 @@ export default function Footer() {
   const quickLinks = useMemo(
     () =>
       [
-        { name: t("footer.quick.raceLive"), url: "#" },
-        { name: t("footer.quick.correspondents"), url: "#" },
-        { name: t("footer.quick.schedule"), url: "#" },
-        { name: t("footer.quick.community"), url: "#" },
+        { name: "Latest News", url: "#latest-news" },
+        { name: "Race & Interview", url: "#race-interview" },
+        { name: "NEWS & INFORMATION", url: "#news-information" },
+        { name: "VARIETY BEGINNER", url: "#variety-beginner" },
+        { name: "配信予定レース", url: "#schedule-upcoming" },
+        { name: "配信終了レース", url: "#schedule-ended" },
+        { name: "SNS&Blog", url: "#sns-blog" },
+        { name: "Community", url: "#community" },
+        { name: "GCTV特派員MAP", url: "#tokuhain-map" },
       ] as const,
     [t],
   );

@@ -19,7 +19,7 @@ export default function HeroSection() {
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
 
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pt-14 text-center sm:pt-16 md:pt-0">
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pt-28 text-center sm:pt-32 md:pt-0">
         <div className="mb-8">
           <img
             src="https://static.readdy.ai/image/7c6e09d6014ba4e8528d2ee81745709e/757effa5c29c28ccf2ee64f4af8f45ca.png"

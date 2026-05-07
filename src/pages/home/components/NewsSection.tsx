@@ -11,7 +11,7 @@ export default function NewsSection() {
   const newsItems = articles.slice(0, 3);
 
   return (
-    <section className="py-16 px-4 bg-white">
+    <section id="latest-news" className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 relative">
           <div className="hidden md:block absolute left-2 top-0 w-36 lg:w-40 pointer-events-none opacity-90">

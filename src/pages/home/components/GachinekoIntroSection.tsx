@@ -18,7 +18,7 @@ export default function GachinekoIntroSection() {
   );
 
   return (
-    <section className="border-b border-rose-100 bg-gradient-to-b from-white via-rose-50/70 to-white px-4 pt-8 pb-14">
+    <section id="mascot" className="border-b border-rose-100 bg-gradient-to-b from-white via-rose-50/70 to-white px-4 pt-8 pb-14">
       <div className="max-w-6xl mx-auto text-center mb-8">
         <p className="text-xs font-black tracking-[0.2em] text-red-600 uppercase mb-2">
           {t("mascot.sectionLabel")}

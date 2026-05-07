@@ -57,7 +57,7 @@ export default function SocialBlogSection() {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gray-50">
+    <section id="sns-blog" className="py-20 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
