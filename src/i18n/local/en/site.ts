@@ -40,6 +40,8 @@ export default {
   "mascot.caption.onigiri": "Snack Time",
   "mascot.caption.ganbaru": "Hang in there!",
   "mascot.caption.tanoshimi": "So excited!",
+  "mascot.caption.iine": "Nice!",
+  "mascot.caption.omedeto": "Congrats!",
 
   "news.subtitle": "Fresh updates & reports from GCTV",
   "news.noArticlesCmsHint":

@@ -22,8 +22,8 @@ export default function Home() {
         <ScheduleSection />
         <SocialBlogSection />
         <CommunitySection />
-        <GachinekoIntroSection />
         <TravelMapSection />
+        <GachinekoIntroSection />
       </main>
       <Footer />
     </>

@@ -13,10 +13,7 @@ export default function NewsSection() {
   return (
     <section id="latest-news" className="py-16 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 relative">
-          <div className="hidden md:block absolute left-2 top-0 w-36 lg:w-40 pointer-events-none opacity-90">
-            <GachinekoSticker variant="ohayon" className="w-full h-auto" />
-          </div>
+        <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
             <span className="text-red-600">Latest News</span>
           </h2>
@@ -30,14 +27,8 @@ export default function NewsSection() {
           <p className="text-center text-gray-500 py-16">{t("news.noArticlesCmsHint")}</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {newsItems.map((item) => (
-              <Link
-                key={item.slug}
-                to={`/articles/${item.slug}`}
-                className="group block cursor-pointer"
-                onMouseEnter={() => setHoveredSlug(item.slug)}
-                onMouseLeave={() => setHoveredSlug(null)}
-              >
+            {newsItems.map((item, index) => {
+              const card = (
                 <div
                   className={`bg-gray-50 rounded-3xl overflow-hidden transition-all duration-300 ${
                     hoveredSlug === item.slug ? "transform -translate-y-2" : ""
@@ -76,8 +67,29 @@ export default function NewsSection() {
                     </div>
                   </div>
                 </div>
-              </Link>
-            ))}
+              );
+
+              return (
+                <Link
+                  key={item.slug}
+                  to={`/articles/${item.slug}`}
+                  className="group block cursor-pointer"
+                  onMouseEnter={() => setHoveredSlug(item.slug)}
+                  onMouseLeave={() => setHoveredSlug(null)}
+                >
+                  {index === 0 ? (
+                    <div className="relative pt-10 sm:pt-12">
+                      <div className="pointer-events-none absolute left-3 sm:left-5 top-0 z-10 w-24 sm:w-28 md:w-32 -translate-y-[38%] drop-shadow-[0_6px_18px_rgba(0,0,0,0.18)]">
+                        <GachinekoSticker variant="yoroshiku" className="w-full h-auto" />
+                      </div>
+                      {card}
+                    </div>
+                  ) : (
+                    card
+                  )}
+                </Link>
+              );
+            })}
           </div>
         )}
 

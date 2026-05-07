@@ -40,6 +40,8 @@ export default {
   "mascot.caption.onigiri": "補給タイム",
   "mascot.caption.ganbaru": "がんばるニャ",
   "mascot.caption.tanoshimi": "たのしみニャ！",
+  "mascot.caption.iine": "いいね",
+  "mascot.caption.omedeto": "おめでとにゃ",
 
   "news.subtitle": "GCTVからの最新情報・レポート",
   "news.noArticlesCmsHint":

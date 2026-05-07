@@ -9,7 +9,7 @@ export default function GachinekoIntroSection() {
   const showcase = useMemo(
     () =>
       (
-        ["gorogoro", "onigiri", "ganbaru", "tanoshimi"] as const
+        ["iine", "omedeto", "onigiri", "gorogoro"] as const
       ).map((variant) => ({
         variant,
         caption: t(`mascot.caption.${variant}`),
