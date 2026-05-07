@@ -138,6 +138,7 @@ export default function Footer() {
                 <strong className="text-gray-800">{t("footer.companyName")}</strong>
               </p>
               <p>{t("footer.addressLine")}</p>
+              <p>info@cycle-net.jp</p>
             </div>
             <div className="text-gray-400 text-sm text-center md:text-right">
               <p>&copy; 2024 Gachinko Cycle TV. All rights reserved.</p>
