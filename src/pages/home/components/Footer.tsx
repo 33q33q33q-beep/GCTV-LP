@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import GachinekoSticker from "../../../components/GachinekoSticker";
+import { GCTV_LOGO_URL } from "../../../data/brandAssets";
+import { packageAsset } from "../../../lib/packageAsset";
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -63,11 +65,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div>
             <div className="flex flex-wrap items-end gap-4 mb-4">
-              <img
-                src="https://static.readdy.ai/image/7c6e09d6014ba4e8528d2ee81745709e/757effa5c29c28ccf2ee64f4af8f45ca.png"
-                alt={t("hero.logoAlt")}
-                className="h-16 w-auto"
-              />
+              <img src={packageAsset(GCTV_LOGO_URL)} alt={t("hero.logoAlt")} className="h-16 w-auto" />
               <div className="hidden md:block md:w-32 shrink-0 -mb-1">
                 <GachinekoSticker variant="ganbaru" className="w-full h-auto" />
               </div>

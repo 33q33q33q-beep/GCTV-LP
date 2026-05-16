@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import GachinekoSticker from "../../../components/GachinekoSticker";
 import { usePublishedArticles } from "../../../hooks/usePublishedArticles";
 
 export default function NewsSection() {
@@ -26,70 +25,53 @@ export default function NewsSection() {
         ) : newsItems.length === 0 ? (
           <p className="text-center text-gray-500 py-16">{t("news.noArticlesCmsHint")}</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {newsItems.map((item, index) => {
-              const card = (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+            {newsItems.map((item) => (
+              <Link
+                key={item.slug}
+                to={`/articles/${item.slug}`}
+                className="group flex h-full cursor-pointer"
+                onMouseEnter={() => setHoveredSlug(item.slug)}
+                onMouseLeave={() => setHoveredSlug(null)}
+              >
                 <div
-                  className={`bg-gray-50 rounded-3xl overflow-hidden transition-all duration-300 ${
+                  className={`flex h-full w-full flex-col overflow-hidden rounded-3xl bg-gray-50 transition-all duration-300 ${
                     hoveredSlug === item.slug ? "transform -translate-y-2" : ""
                   }`}
                 >
-                  <div className="relative overflow-hidden aspect-video">
+                  <div className="relative aspect-video w-full shrink-0 overflow-hidden">
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+                    <div className="absolute left-4 top-4">
+                      <span className="rounded-full bg-red-600 px-3 py-1.5 text-xs font-bold text-white">
                         {item.category}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-gray-400 text-sm mb-3">
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="mb-3 flex items-center gap-2 text-sm text-gray-400">
                       <i className="ri-calendar-line"></i>
                       <time dateTime={item.publishedAt}>{item.date}</time>
                     </div>
 
-                    <h3 className="text-gray-900 font-bold text-lg leading-snug mb-3 group-hover:text-red-600 transition-colors line-clamp-2">
+                    <h3 className="mb-3 line-clamp-2 text-lg font-bold leading-snug text-gray-900 transition-colors group-hover:text-red-600">
                       {item.title}
                     </h3>
 
-                    <p className="text-gray-500 text-sm leading-relaxed line-clamp-3 mb-4">
-                      {item.excerpt}
-                    </p>
+                    <p className="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-gray-500">{item.excerpt}</p>
 
-                    <div className="flex items-center gap-2 text-red-600 font-bold text-sm group-hover:gap-3 transition-all">
+                    <div className="mt-auto flex items-center gap-2 text-sm font-bold text-red-600 transition-all group-hover:gap-3">
                       <span>{t("articles.readMore")}</span>
                       <i className="ri-arrow-right-line"></i>
                     </div>
                   </div>
                 </div>
-              );
-
-              return (
-                <Link
-                  key={item.slug}
-                  to={`/articles/${item.slug}`}
-                  className="group block cursor-pointer"
-                  onMouseEnter={() => setHoveredSlug(item.slug)}
-                  onMouseLeave={() => setHoveredSlug(null)}
-                >
-                  {index === 0 ? (
-                    <div className="relative pt-10 sm:pt-12">
-                      <div className="pointer-events-none absolute left-3 sm:left-5 top-0 z-10 w-24 sm:w-28 md:w-32 -translate-y-[38%] drop-shadow-[0_6px_18px_rgba(0,0,0,0.18)]">
-                        <GachinekoSticker variant="yoroshiku" className="w-full h-auto" />
-                      </div>
-                      {card}
-                    </div>
-                  ) : (
-                    card
-                  )}
-                </Link>
-              );
-            })}
+              </Link>
+            ))}
           </div>
         )}
 

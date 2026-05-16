@@ -1,5 +1,6 @@
 import { fallbackTokuhainPins } from "../data/fallbackTokuhainPins";
 import type { TokuhainMapPinRow } from "../domain/tokuhainMapPin";
+import { applyTokuhainPinMedia } from "../lib/applyStandaloneMedia";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 const TOKUHAIN_TABLE = "tokuhain_map_pins";
@@ -34,7 +35,7 @@ export async function fetchPublicTokuhainPins(): Promise<{
   source: "db" | "fallback";
 }> {
   if (!isSupabaseConfigured || !supabase) {
-    return { rows: fallbackTokuhainPins, source: "fallback" };
+    return { rows: applyTokuhainPinMedia(fallbackTokuhainPins), source: "fallback" };
   }
 
   const { data, error } = await supabase
@@ -50,12 +51,12 @@ export async function fetchPublicTokuhainPins(): Promise<{
       /could not find the table/i.test(error.message) ||
       error.code === "PGRST205";
     if (tableMissing) {
-      return { rows: fallbackTokuhainPins, source: "fallback" };
+      return { rows: applyTokuhainPinMedia(fallbackTokuhainPins), source: "fallback" };
     }
     return { rows: [], source: "db" };
   }
 
-  return { rows: (data ?? []) as TokuhainMapPinRow[], source: "db" };
+  return { rows: applyTokuhainPinMedia((data ?? []) as TokuhainMapPinRow[]), source: "db" };
 }
 
 export async function fetchTokuhainPinsAdmin(): Promise<TokuhainMapPinRow[]> {

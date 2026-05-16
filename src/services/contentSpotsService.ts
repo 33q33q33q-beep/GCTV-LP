@@ -1,9 +1,10 @@
 import { mergeContentCategories, type ContentSpotRowDb } from "../data/contentsCatalog";
+import { applyMergedCategories } from "../lib/applyStandaloneMedia";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 export async function fetchMergedContentCategories() {
   if (!isSupabaseConfigured || !supabase) {
-    return mergeContentCategories([]);
+    return applyMergedCategories(mergeContentCategories([]));
   }
 
   const { data, error } = await supabase
@@ -12,10 +13,10 @@ export async function fetchMergedContentCategories() {
 
   if (error) {
     console.warn("[contentSpotsService]", error.message);
-    return mergeContentCategories([]);
+    return applyMergedCategories(mergeContentCategories([]));
   }
 
-  return mergeContentCategories((data ?? []) as ContentSpotRowDb[]);
+  return applyMergedCategories(mergeContentCategories((data ?? []) as ContentSpotRowDb[]));
 }
 
 export async function fetchSpotsAdmin(): Promise<ContentSpotRowDb[]> {

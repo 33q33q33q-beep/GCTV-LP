@@ -1,31 +1,45 @@
 import { useTranslation } from "react-i18next";
+import { GCTV_LOGO_URL } from "../../../data/brandAssets";
+import { packageAsset } from "../../../lib/packageAsset";
+import { IS_STANDALONE } from "../../../lib/standalone";
+
+/** 記事サムネと同系の画像（スタンドアロン収集時に確実に取得できるURL） */
+const HERO_BG_SOURCE =
+  "https://readdy.ai/api/search-image?query=professional%20cycling%20race%20finish%20line%20with%20cyclists%20sprinting%20at%20high%20speed%2C%20dramatic%20sports%20photography%2C%20crowd%20cheering%20in%20background%2C%20clear%20blue%20sky%2C%20road%20bicycle%20racing%20competition&width=640&height=360&seq=news-1&orientation=landscape";
 
 export default function HeroSection() {
   const { t } = useTranslation();
   const headlineMid = t("hero.headline.mid").trim();
+  const logoSrc = packageAsset(GCTV_LOGO_URL);
+  const heroBgSrc = packageAsset(HERO_BG_SOURCE);
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
       <div className="absolute inset-0">
-        <iframe
-          src="https://www.youtube.com/embed/VAW_xQtJQsA?autoplay=1&mute=1&controls=0&loop=1&playlist=VAW_xQtJQsA&start=0&rel=0&showinfo=0&modestbranding=1"
-          title={t("hero.iframeTitle")}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 h-full w-full"
-          style={{ border: "none" }}
-        />
+        {IS_STANDALONE ? (
+          <img
+            src={heroBgSrc}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            aria-hidden
+          />
+        ) : (
+          <iframe
+            src="https://www.youtube.com/embed/VAW_xQtJQsA?autoplay=1&mute=1&controls=0&loop=1&playlist=VAW_xQtJQsA&start=0&rel=0&showinfo=0&modestbranding=1"
+            title={t("hero.iframeTitle")}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 h-full w-full"
+            style={{ border: "none" }}
+          />
+        )}
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pt-28 text-center sm:pt-32 md:pt-0">
         <div className="mb-8">
-          <img
-            src="https://static.readdy.ai/image/7c6e09d6014ba4e8528d2ee81745709e/757effa5c29c28ccf2ee64f4af8f45ca.png"
-            alt={t("hero.logoAlt")}
-            className="mx-auto h-24 w-auto md:h-32"
-          />
+          <img src={logoSrc} alt={t("hero.logoAlt")} className="mx-auto h-24 w-auto md:h-32" />
         </div>
 
         <h1 className="mb-4 text-3xl font-black leading-tight text-white md:text-5xl lg:text-6xl">

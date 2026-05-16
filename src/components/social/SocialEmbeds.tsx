@@ -127,9 +127,12 @@ function loadTwitterWidgets(container: HTMLElement | null) {
 export function TwitterTimelineEmbed({
   timelineHref = DEFAULT_TWITTER_TIMELINE_HREF,
   linkLabel = 'Tweets by GachinkoCycleTV',
+  minHeight = 480,
 }: {
   timelineHref?: string;
   linkLabel?: string;
+  /** 埋め込み枠の最小高さ（px）。SNS4列表示などで小さくする */
+  minHeight?: number;
 }) {
   const href = timelineHref.trim();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -169,7 +172,11 @@ export function TwitterTimelineEmbed({
   }, [href]);
 
   return (
-    <div ref={containerRef} className="rounded-2xl overflow-hidden min-h-[480px] bg-slate-950/50">
+    <div
+      ref={containerRef}
+      className="overflow-hidden rounded-2xl bg-slate-950/50"
+      style={{ minHeight }}
+    >
       <a className="twitter-timeline" href={href}>
         {linkLabel}
       </a>

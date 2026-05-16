@@ -1,5 +1,17 @@
 import { useTranslation } from "react-i18next";
+import type { BroadcastRaceVm } from "../../../domain/broadcastRace";
 import { useBroadcastSchedule } from "../../../hooks/useBroadcastSchedule";
+
+/** 2026/5/24〜5/31 の TOJ（同日の他レースは除外） */
+function isUpcomingTojMay2026Block(item: BroadcastRaceVm): boolean {
+  const d = item.race_date;
+  return d >= "2026-05-24" && d <= "2026-05-31" && item.title.trim().startsWith("TOJ");
+}
+
+function upcomingNoteClass(note: string): string {
+  if (/COPPA|AYAGAWA/i.test(note)) return "text-pink-600";
+  return "text-red-600";
+}
 
 export default function ScheduleSection() {
   const { t } = useTranslation();
@@ -29,31 +41,55 @@ export default function ScheduleSection() {
                 <p className="text-gray-500 text-sm">{t("schedule.noUpcoming")}</p>
               ) : (
                 <div className="space-y-3">
-                  {upcoming.map((item) => (
+                  {upcoming.map((item) => {
+                    const toj = isUpcomingTojMay2026Block(item);
+                    return (
                     <div
                       key={item.id ?? `${item.race_date}-${item.title}-${item.sort_order ?? 0}`}
-                      className="bg-white rounded-xl p-5 transition-all duration-300 border border-gray-200 hover:border-red-400 hover:shadow-md group"
+                      className={
+                        toj
+                          ? "rounded-xl border border-emerald-200 bg-emerald-50/90 p-5 transition-all duration-300 hover:border-emerald-400 hover:shadow-md group"
+                          : "rounded-xl border border-gray-200 bg-white p-5 transition-all duration-300 hover:border-red-400 hover:shadow-md group"
+                      }
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                         <div className="flex-shrink-0">
-                          <span className="inline-block bg-gradient-to-br from-red-500 to-rose-600 text-white font-bold px-4 py-2 rounded-lg text-sm whitespace-nowrap">
+                          <span
+                            className={
+                              toj
+                                ? "inline-block whitespace-nowrap rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 px-4 py-2 text-sm font-bold text-white"
+                                : "inline-block whitespace-nowrap rounded-lg bg-gradient-to-br from-red-500 to-rose-600 px-4 py-2 text-sm font-bold text-white"
+                            }
+                          >
                             {item.dateLabel}
                           </span>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <h4 className="text-gray-900 font-black text-lg group-hover:text-red-600 transition-colors">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h4
+                              className={
+                                toj
+                                  ? "text-lg font-black text-gray-900 transition-colors group-hover:text-emerald-800"
+                                  : "text-lg font-black text-gray-900 transition-colors group-hover:text-red-600"
+                              }
+                            >
                               {item.title}
                             </h4>
-                            <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1 whitespace-nowrap animate-pulse">
+                            <span
+                              className={
+                                toj
+                                  ? "flex animate-pulse items-center gap-1 whitespace-nowrap rounded-full bg-emerald-600 px-2 py-1 text-xs font-bold text-white"
+                                  : "flex animate-pulse items-center gap-1 whitespace-nowrap rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white"
+                              }
+                            >
                               <i className="ri-live-fill"></i>
                               {t("schedule.badge.live")}
                             </span>
                           </div>
-                          <p className="text-gray-700 font-semibold text-base mt-1">
+                          <p className="mt-1 text-base font-semibold text-gray-700">
                             {item.subtitle}
                             {item.note ? (
-                              <span className="text-red-600 font-bold ml-2">{item.note}</span>
+                              <span className={`ml-2 font-bold ${upcomingNoteClass(item.note)}`}>{item.note}</span>
                             ) : null}
                           </p>
                           {item.live_url ? (
@@ -61,7 +97,11 @@ export default function ScheduleSection() {
                               href={item.live_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex mt-3 text-sm font-bold text-red-600 hover:underline"
+                              className={
+                                toj
+                                  ? "mt-3 inline-flex text-sm font-bold text-emerald-700 hover:underline"
+                                  : "mt-3 inline-flex text-sm font-bold text-red-600 hover:underline"
+                              }
                             >
                               {t("schedule.link.live")} <i className="ri-external-link-line ml-1"></i>
                             </a>
@@ -69,7 +109,8 @@ export default function ScheduleSection() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>

@@ -81,7 +81,7 @@ export const fallbackBroadcastRaces: BroadcastRaceVm[] = [
     dateLabel: "5月31日（日）",
     title: "E1 E2 E3",
     subtitle: "第3回綾川町ロードレース",
-    note: "",
+    note: "(COPPA AYAGAWA)",
     live_url: "",
     archive_url: "",
   },
