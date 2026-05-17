@@ -246,7 +246,7 @@ export default function TravelMapSection() {
   const showEmptyHint = !loading && !hasPins && source === 'db';
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section id="tokuhain-map" className="py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 relative">
           <div className="hidden md:block absolute md:left-auto md:translate-x-0 md:top-0 md:right-0 lg:right-2 md:w-40 lg:w-44 pointer-events-none">

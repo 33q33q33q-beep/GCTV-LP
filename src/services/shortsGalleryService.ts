@@ -3,6 +3,7 @@ import {
   fallbackGallerySettings,
 } from "../data/fallbackShortsGallery";
 import type { ShortsGalleryItemRow, ShortsGallerySettingsRow } from "../domain/shortsGallery";
+import { applyShortsGalleryItems } from "../lib/applyStandaloneMedia";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 export async function fetchPublicGallery(): Promise<{
@@ -12,7 +13,7 @@ export async function fetchPublicGallery(): Promise<{
 }> {
   if (!isSupabaseConfigured || !supabase) {
     return {
-      items: fallbackGalleryItems,
+      items: applyShortsGalleryItems(fallbackGalleryItems),
       settings: fallbackGallerySettings,
       source: "fallback",
     };
@@ -34,7 +35,7 @@ export async function fetchPublicGallery(): Promise<{
   const settings =
     (settingsRes.data as ShortsGallerySettingsRow | undefined) ?? fallbackGallerySettings;
 
-  return { items, settings, source: "db" };
+  return { items: applyShortsGalleryItems(items), settings, source: "db" };
 }
 
 export async function fetchGalleryItemsAdmin(): Promise<ShortsGalleryItemRow[]> {

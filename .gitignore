@@ -5,3 +5,15 @@
 .env.*.local
 .DS_Store
 *.local
+
+# local export artifacts (do not commit)
+gctv-public-package.zip
+gctv-html-site.zip
+gctv-standalone-html.zip
+gctv-html-package.zip
+public/vendor/
+public/pkg-media/
+.standalone-staging/
+public-package/
+PUBLIC_PACKAGE.md
+html-package-staging/

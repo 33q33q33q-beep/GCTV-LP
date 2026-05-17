@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import GachinekoSticker from "../../../components/GachinekoSticker";
+import { GCTV_LOGO_URL } from "../../../data/brandAssets";
+import { packageAsset } from "../../../lib/packageAsset";
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -44,10 +46,15 @@ export default function Footer() {
   const quickLinks = useMemo(
     () =>
       [
-        { name: t("footer.quick.raceLive"), url: "#" },
-        { name: t("footer.quick.correspondents"), url: "#" },
-        { name: t("footer.quick.schedule"), url: "#" },
-        { name: t("footer.quick.community"), url: "#" },
+        { name: "Latest News", url: "#latest-news" },
+        { name: "Race & Interview", url: "#race-interview" },
+        { name: "NEWS & INFORMATION", url: "#news-information" },
+        { name: "VARIETY BEGINNER", url: "#variety-beginner" },
+        { name: "配信予定レース", url: "#schedule-upcoming" },
+        { name: "配信終了レース", url: "#schedule-ended" },
+        { name: "SNS&Blog", url: "#sns-blog" },
+        { name: "Community", url: "#community" },
+        { name: "GCTV特派員MAP", url: "#tokuhain-map" },
       ] as const,
     [t],
   );
@@ -58,11 +65,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div>
             <div className="flex flex-wrap items-end gap-4 mb-4">
-              <img
-                src="https://static.readdy.ai/image/7c6e09d6014ba4e8528d2ee81745709e/757effa5c29c28ccf2ee64f4af8f45ca.png"
-                alt={t("hero.logoAlt")}
-                className="h-16 w-auto"
-              />
+              <img src={packageAsset(GCTV_LOGO_URL)} alt={t("hero.logoAlt")} className="h-16 w-auto" />
               <div className="hidden md:block md:w-32 shrink-0 -mb-1">
                 <GachinekoSticker variant="ganbaru" className="w-full h-auto" />
               </div>
@@ -133,6 +136,7 @@ export default function Footer() {
                 <strong className="text-gray-800">{t("footer.companyName")}</strong>
               </p>
               <p>{t("footer.addressLine")}</p>
+              <p>info@cycle-net.jp</p>
             </div>
             <div className="text-gray-400 text-sm text-center md:text-right">
               <p>&copy; 2024 Gachinko Cycle TV. All rights reserved.</p>

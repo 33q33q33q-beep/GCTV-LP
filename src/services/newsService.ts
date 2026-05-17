@@ -1,10 +1,13 @@
 import { articleFromNewsRow, type Article, type NewsArticleRow } from "../domain/article";
 import { fallbackArticles } from "../data/fallbackArticles";
+import { applyArticleMedia } from "../lib/applyStandaloneMedia";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 export function fallbackArticlesSorted(): Article[] {
-  return [...fallbackArticles].sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+  return applyArticleMedia(
+    [...fallbackArticles].sort(
+      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+    ),
   );
 }
 
@@ -22,10 +25,13 @@ export async function fetchPublishedArticles(): Promise<{ data: Article[]; sourc
 
   if (error || !data?.length) {
     if (error) console.warn("[newsService]", error.message);
-    return { data: data?.length ? (data as NewsArticleRow[]).map(articleFromNewsRow) : [], source: "db" };
+    return { data: fallbackArticlesSorted(), source: "fallback" };
   }
 
-  return { data: (data as NewsArticleRow[]).map(articleFromNewsRow), source: "db" };
+  return {
+    data: applyArticleMedia((data as NewsArticleRow[]).map(articleFromNewsRow)),
+    source: "db",
+  };
 }
 
 export async function fetchPublishedArticleBySlug(

@@ -9,7 +9,7 @@ export default function GachinekoIntroSection() {
   const showcase = useMemo(
     () =>
       (
-        ["gorogoro", "onigiri", "ganbaru", "tanoshimi"] as const
+        ["iine", "omedeto", "onigiri", "gorogoro"] as const
       ).map((variant) => ({
         variant,
         caption: t(`mascot.caption.${variant}`),
@@ -18,7 +18,7 @@ export default function GachinekoIntroSection() {
   );
 
   return (
-    <section className="border-b border-rose-100 bg-gradient-to-b from-white via-rose-50/70 to-white px-4 pt-8 pb-14">
+    <section id="mascot" className="border-b border-rose-100 bg-gradient-to-b from-white via-rose-50/70 to-white px-4 pt-8 pb-14">
       <div className="max-w-6xl mx-auto text-center mb-8">
         <p className="text-xs font-black tracking-[0.2em] text-red-600 uppercase mb-2">
           {t("mascot.sectionLabel")}
@@ -31,8 +31,15 @@ export default function GachinekoIntroSection() {
       <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 items-end justify-items-center">
         {showcase.map(({ variant, caption }) => (
           <figure key={variant} className="flex flex-col items-center gap-3 w-full max-w-[15rem] sm:max-w-xs">
-            <div className="w-full drop-shadow-lg">
-              <GachinekoSticker variant={variant as GachinekoVariant} className="w-full h-auto" />
+            <div className="w-full drop-shadow-lg flex justify-center items-end">
+              <GachinekoSticker
+                variant={variant as GachinekoVariant}
+                className={
+                  variant === "onigiri"
+                    ? "w-full max-w-full max-h-[10.75rem] sm:max-h-48 md:max-h-52 lg:max-h-56 object-contain"
+                    : "w-full h-auto"
+                }
+              />
             </div>
             <figcaption className="text-xs md:text-sm font-bold text-gray-400">{caption}</figcaption>
           </figure>

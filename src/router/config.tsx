@@ -1,5 +1,6 @@
 import type { RouteObject } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import { IS_STANDALONE_NO_ADMIN } from "../lib/standalone";
 import NotFound from "../pages/NotFound";
 import Home from "../pages/home/page";
 import ArticlesListPage from "../pages/articles/ArticlesListPage";
@@ -17,7 +18,7 @@ import AdminShortsItemForm from "../pages/admin/AdminShortsItemForm";
 import AdminTokuhainMapPage from "../pages/admin/AdminTokuhainMapPage";
 import AdminTokuhainPinForm from "../pages/admin/AdminTokuhainPinForm";
 
-const routes: RouteObject[] = [
+const publicRoutes: RouteObject[] = [
   {
     path: "/",
     element: <Home />,
@@ -30,6 +31,13 @@ const routes: RouteObject[] = [
     path: "/articles/:slug",
     element: <ArticleDetailPage />,
   },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+];
+
+const adminRoutes: RouteObject[] = [
   {
     path: "/admin/login",
     element: <AdminLogin />,
@@ -58,10 +66,10 @@ const routes: RouteObject[] = [
       },
     ],
   },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
 ];
+
+const routes: RouteObject[] = IS_STANDALONE_NO_ADMIN
+  ? publicRoutes
+  : [...publicRoutes.slice(0, -1), ...adminRoutes, publicRoutes[publicRoutes.length - 1]!];
 
 export default routes;

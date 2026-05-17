@@ -20,6 +20,10 @@ export const gachinekoImg = {
   ganbaru: publicAsset("gachineko/ganbaru.png"),
   /** たのしみニャ！ */
   tanoshimi: publicAsset("gachineko/tanoshimi.png"),
+  /** 「いいね」 */
+  iine: publicAsset("gachineko/iine.png"),
+  /** 「おめでとにゃ」 */
+  omedeto: publicAsset("gachineko/omedeto.png"),
 } as const;
 
 export type GachinekoVariant = keyof typeof gachinekoImg;
