@@ -3,22 +3,23 @@ GCTV 静的サイト（HTMLパッケージ）— WEB屋さん向け
 
 ■ 中身
   index.html … トップのHTML（エントリ）
-  assets/ … JavaScript・CSS（ファイル名はビルドごとに変わります）
-  gachineko/ … 画像（マスコットPNG）
+  assets/ … JavaScript・CSS（公開ページ＋管理画面 CMS を含む）
+  pkg-media/ … 同梱画像
+  gachineko/ … マスコットPNG
   community/ … 画像など
-  _redirects … Netlify 等で SPA 用ルーティングに使える場合があります
-  .htaccess … Apache で SPA 用に使える場合があります
+  htaccess.txt … Apache 用（.htaccess にリネームして使用）
+  CMS_README.txt … 管理画面のURL・Supabase の注意
 
-■ アップロード方法（一般的）
-  1. この ZIP を解凍する
-  2. 解凍して出てきた「中身すべて」を、サーバーの公開ディレクトリ
-     （例: public_html / www / htdocs など）にそのまま置く
-  3. ブラウザで index.html が開ける URL にアクセスする
+■ 管理画面（CMS）
+  https://（あなたのドメイン）/admin/login
+  詳細は CMS_README.txt を参照。
 
-■ 注意（React / Vite 製の静的サイト）
-  - ルート直下に置くのが最も安全です（サブフォルダ配信の場合はサーバ設定が必要なことがあります）。
-  - 直接開く file:// では動かない場合があります。必ず HTTP(S) 経由で確認してください。
+■ アップロード方法
+  1. ZIP を解凍する
+  2. 解凍した中身すべてを公開フォルダ（public_html 等）に置く
+  3. index.html と assets/ が同じ階層にあることを確認
+  4. ブラウザでトップと /admin/login を開いて確認
 
-■ 再生成する場合（開発側）
-  プロジェクトで npm ci → npm run build
-  → 生成された out/ フォルダが最新の静的ファイルです。
+■ 注意
+  - file:// では動きません。HTTP(S) で確認してください。
+  - .json ファイルは同梱していません（設定はビルド時に JS へ埋め込み済み）。

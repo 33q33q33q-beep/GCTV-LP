@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 完全独立の静的HTMLパッケージを生成（Supabase・外部CDN画像なし）
- * 出力: gctv-standalone-html.zip
+ * 出力: gctv-public-package.zip（gctv-html-package.zip も同内容で生成）
  */
 import { execSync } from "node:child_process";
 import fs from "node:fs";
@@ -12,12 +12,41 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const PKG_MEDIA = path.join(ROOT, "public", "pkg-media");
 const GENERATED = path.join(ROOT, "src", "generated", "standaloneAssets.ts");
-const OUT_ZIP = path.join(ROOT, "gctv-html-package.zip");
+const OUTPUT_ZIPS = [
+  path.join(ROOT, "gctv-public-package.zip"),
+  path.join(ROOT, "gctv-html-package.zip"),
+];
 const REMIXICON_DIR = path.join(ROOT, "public", "vendor", "remixicon");
 const REMIXICON_CDN =
   "https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.min.css";
 
-const SKIP_FILES = new Set(["llms.txt", "_redirects"]);
+const SKIP_FILES = new Set([
+  "llms.txt",
+  "_redirects",
+  "vercel.json",
+  "PUBLIC_PACKAGE.md",
+]);
+
+function loadDotEnv(filePath) {
+  const env = {};
+  if (!fs.existsSync(filePath)) return env;
+  for (const line of fs.readFileSync(filePath, "utf8").split(/\r?\n/)) {
+    const t = line.trim();
+    if (!t || t.startsWith("#")) continue;
+    const eq = t.indexOf("=");
+    if (eq < 0) continue;
+    const key = t.slice(0, eq).trim();
+    let val = t.slice(eq + 1).trim();
+    if (
+      (val.startsWith('"') && val.endsWith('"')) ||
+      (val.startsWith("'") && val.endsWith("'"))
+    ) {
+      val = val.slice(1, -1);
+    }
+    env[key] = val;
+  }
+  return env;
+}
 const SKIP_EXT = new Set([".json", ".map"]);
 
 const URL_RE =
@@ -154,16 +183,28 @@ function sanitizeIndexHtml(html, ogImageRel) {
   return out;
 }
 
-function finalizePackage(staging) {
+function purgeJsonArtifacts(staging) {
+  const walk = (dir) => {
+    for (const name of fs.readdirSync(dir)) {
+      const p = path.join(dir, name);
+      if (fs.statSync(p).isDirectory()) walk(p);
+      else if (shouldSkipFile(name)) fs.unlinkSync(p);
+    }
+  };
+  walk(staging);
+
   const indexPath = path.join(staging, "index.html");
-  if (fs.existsSync(indexPath)) {
-    const html = fs.readFileSync(indexPath, "utf8");
-    fs.writeFileSync(
-      indexPath,
-      sanitizeIndexHtml(html, firstPkgMediaRel(staging)),
-      "utf8",
-    );
+  if (!fs.existsSync(indexPath)) return;
+  const html = fs.readFileSync(indexPath, "utf8");
+  const cleaned = sanitizeIndexHtml(html, firstPkgMediaRel(staging));
+  if (/application\/ld\+json/i.test(cleaned)) {
+    throw new Error("index.html に JSON-LD が残っています");
   }
+  fs.writeFileSync(indexPath, cleaned, "utf8");
+}
+
+function finalizePackage(staging) {
+  purgeJsonArtifacts(staging);
 
   const htaccess = path.join(staging, ".htaccess");
   if (fs.existsSync(htaccess)) {
@@ -189,18 +230,31 @@ function zipOut() {
   copyRecursive(path.join(ROOT, "out"), staging);
   finalizePackage(staging);
 
+  const readmeDeploy = path.join(ROOT, "deploy", "SERVER_UPLOAD_README.txt");
+  const cmsReadme = path.join(ROOT, "deploy", "CMS_README.txt");
+  if (fs.existsSync(readmeDeploy)) {
+    fs.copyFileSync(readmeDeploy, path.join(staging, "SERVER_UPLOAD_README.txt"));
+  }
+  if (fs.existsSync(cmsReadme)) {
+    fs.copyFileSync(cmsReadme, path.join(staging, "CMS_README.txt"));
+  }
+
   const standaloneNote = `GCTV 静的HTMLパッケージ（サーバーアップロード用）
 ==========================================
 
 ■ 含まれるもの
   index.html … サイトの入口（HTML）
-  assets/ … 表示に必要な JS・CSS
+  assets/ … 公開ページ＋管理画面 CMS（/admin）の JS・CSS
   pkg-media/ … ニュース・ヒーロー等の画像
   gachineko/ … マスコット画像
   vendor/remixicon/ … アイコン用フォント（外部CDNなし）
+  CMS_README.txt … 管理画面の使い方
+
+■ 管理画面
+  /admin/login からログイン（Supabase 設定済みビルドのみ）
 
 ■ 含まれないもの
-  .json ファイル、JSON-LD、Supabase、管理画面（/admin）
+  .json ファイル、JSON-LD
 
 ■ アップロード手順
   1. この ZIP を解凍する（ZIP そのものを置かない）
@@ -218,9 +272,12 @@ function zipOut() {
 `;
   fs.writeFileSync(path.join(staging, "README.txt"), standaloneNote, "utf8");
 
-  if (fs.existsSync(OUT_ZIP)) fs.unlinkSync(OUT_ZIP);
-  execSync(`cd "${staging}" && zip -r "${OUT_ZIP}" .`, { stdio: "inherit" });
+  for (const zipPath of OUTPUT_ZIPS) {
+    if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
+    execSync(`cd "${staging}" && zip -r "${zipPath}" .`, { stdio: "inherit" });
+  }
   fs.rmSync(staging, { recursive: true });
+  return OUTPUT_ZIPS;
 }
 
 async function main() {
@@ -233,7 +290,21 @@ async function main() {
   const map = await downloadAll(urls);
   writeAssetMap(map);
 
-  console.log("3/5 Vite ビルド（相対パス・スタンドアロン）...");
+  const dotenv = loadDotEnv(path.join(ROOT, ".env"));
+  const supabaseUrl =
+    dotenv.VITE_SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? "";
+  const supabaseKey =
+    dotenv.VITE_SUPABASE_ANON_KEY ?? process.env.VITE_SUPABASE_ANON_KEY ?? "";
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn(
+      "⚠ .env に VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY がありません。",
+    );
+    console.warn("  公開サイトはデモデータ、管理画面 CMS はログインできません。");
+  } else {
+    console.log("  Supabase 設定をビルドに埋め込みます（管理画面 CMS 用）");
+  }
+
+  console.log("3/5 Vite ビルド（相対パス・CMS同梱）...");
   execSync("npm run build", {
     cwd: ROOT,
     stdio: "inherit",
@@ -241,17 +312,22 @@ async function main() {
       ...process.env,
       BASE_PATH: "./",
       VITE_STANDALONE: "true",
-      VITE_SUPABASE_URL: "",
-      VITE_SUPABASE_ANON_KEY: "",
-      VITE_INSTAGRAM_FEED_IFRAME_URL: "",
+      VITE_SUPABASE_URL: supabaseUrl,
+      VITE_SUPABASE_ANON_KEY: supabaseKey,
+      VITE_INSTAGRAM_FEED_IFRAME_URL:
+        dotenv.VITE_INSTAGRAM_FEED_IFRAME_URL ??
+        process.env.VITE_INSTAGRAM_FEED_IFRAME_URL ??
+        "",
     },
   });
 
   console.log("4/5 ZIP 作成（JSON 除外・HTML 整形）...");
   zipOut();
 
-  const stat = fs.statSync(OUT_ZIP);
-  console.log(`\n完了: ${OUT_ZIP} (${(stat.size / 1024 / 1024).toFixed(2)} MB)`);
+  for (const zipPath of zipOut()) {
+    const stat = fs.statSync(zipPath);
+    console.log(`\n完了: ${zipPath} (${(stat.size / 1024 / 1024).toFixed(2)} MB)`);
+  }
 }
 
 main().catch((e) => {

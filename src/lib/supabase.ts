@@ -1,10 +1,9 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { IS_STANDALONE } from "./standalone";
 
 const url = import.meta.env.VITE_SUPABASE_URL ?? "";
 const key = import.meta.env.VITE_SUPABASE_ANON_KEY ?? "";
 
-export const isSupabaseConfigured = !IS_STANDALONE && Boolean(url && key);
+export const isSupabaseConfigured = Boolean(url && key);
 
 /** 未設定のときはダミーのまま公開画面はフォールバックデータを利用 */
 export const supabase: SupabaseClient | null = isSupabaseConfigured
